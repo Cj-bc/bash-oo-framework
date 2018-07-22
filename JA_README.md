@@ -35,3 +35,30 @@ Bash Infinityは分かりづらい"bash syntax"を、より綺麗でよりモダ
 * 豊富な関数を揃えた、型システム用標準ライブラリ (`util/type`)
 * **関数型プログラミング**のためのoperational chain (`util/type`)
 * オブジェクト指向用の型システム (`util/class`)
+
+全ての機能はモジュール単位で構成されているため、簡単に使いたい機能だけをimportすることができます。例えば、名前付き引数やtry-catchモジュールは別々のファイルに記述されています。
+
+例外と`throw`とエラーハンドリング
+=====================================
+
+```
+import util/exception
+```
+
+ハイライト機能の一つに、そのまま動作するエラーハンドリングがあります。もしスクリプトがエラーを起こしたら、自動的に終了してstackを呼び出します。
+
+![example call stack](https://raw.githubusercontent.com/niieani/bash-oo-framework/master/docs/exception.png "Example Call Stack")
+
+独自の例外を`trow`してエラーを引き起こすこともできます。
+
+```bash
+e="The hard disk is not connected properly!" throw
+```
+
+もしもどこで発生したのかわからなくてもcall stackが表示されるので、デバッグ時に役に立ちます。
+
+*try & catch*で囲まれた**例外**は、**-o erroexit**オプションなしでも安全に実行できるようにします。
+
+何か間違いがあった場合、例外の詳細なバックトレースが表示され、失敗したコマンドがハイライトされます。スクリプトの実行が一時停止し、そのまま続けるか、強制終了させるかの選択をすることができます。
+反対に、一部のブロックが失敗することを望んでいる場合、それを`try`ブロックで覆い`catch`内でそのエラーを処理することができます。
+
