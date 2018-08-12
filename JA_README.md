@@ -62,3 +62,67 @@ e="The hard disk is not connected properly!" throw
 何か間違いがあった場合、例外の詳細なバックトレースが表示され、失敗したコマンドがハイライトされます。スクリプトの実行が一時停止し、そのまま続けるか、強制終了させるかの選択をすることができます。
 反対に、一部のブロックが失敗することを望んでいる場合、それを`try`ブロックで覆い`catch`内でそのエラーを処理することができます。
 
+関数の名前付き引数
+====================
+
+```
+import util/namedParameters
+```
+
+どのようなプログラミング言語であれ、可読性向上のために意味のある名前を変数につけるのはいいことです。
+Bashの場合、関数のパラメータ変数を避けることを意味します。
+関数内で、引数にアクセスするために可読性の悪い`$1`,`$2`等を使う代わりに、次のように書くことができます。
+
+```bash
+testPassingParams() {
+
+    [string] hello
+    [string[4]] anArrayWithFourElements
+    l=2 [string[]] anotherArrayWithTwo
+    [string] anotherSingle
+    [reference] table   # references はbash4.3以上でのみ動きます
+    [...rest] anArrayOfVariedSize
+
+    test "$hello" = "$1" && echo correct
+    #
+    test "${anArrayWithFourElements[0]}" = "$2" && echo correct
+    test "${anArrayWithFourElements[1]}" = "$3" && echo correct
+    test "${anArrayWithFourElements[2]}" = "$4" && echo correct
+    # etc...
+    #
+    test "${anotherArrayWithTwo[0]}" = "$6" && echo correct
+    test "${anotherArrayWithTwo[1]}" = "$7" && echo correct
+    #
+    test "$anotherSingle" = "$8" && echo correct
+    #
+    test "${table[test]}" = "works"
+    table[inside]="adding a new value"
+    #
+    # I'm using * just in this example:
+    test "${anArrayOfVariedSize[*]}" = "${*:10}" && echo correct
+}
+
+fourElements=( a1 a2 "a3 with spaces" a4 )
+twoElements=( b1 b2 )
+
+declare -A assocArray
+assocArray[test]="works"
+
+testPassingParams "first" "${fourElements[@]}" "${twoElements[@]}" "single with spaces" assocArray "and more... " "even more..."
+
+test "${assocArray[inside]}" = "adding a new value"
+```
+
+システムによって、以下のように割り当てられます。
+ * **$1**は**$hello**に代入されます。
+ * **$anArrayWithFourElements**は、$2から$5の値をもつ配列の引数になります。
+ * **$anotherArrayWithTwo**は$6と$7の値を持った配列になります。
+ * **$8**は**$anotherSingle**に代入されます。
+ * **$table**は9番目の引数として渡された名前を持つ変数への参照になります。
+ * **$anArrayOfVariedSize**は、それ以降のすべてのパラメーターの、bashの配列になります。
+
+言い換えれば、引数をそれらの名前で呼ぶことができる(可読性を向上させる)だけでなく、配列を簡単に渡す(bash4.3以上なら、さらに変数の参照を渡す)ことができます！それに加えて、マップされた変数は全てローカル変数です。
+このモジュールはとても軽量で、bash 3でもbash 4でも動きます(riferencceを除く - bash >=4.3)。もしこれだけを切り離して使いたければ、`/lib/system/02_named_parameters.sh`を取り出して使ってください。
+
+
+注： 2-10までの引数には、```[string[4]]```の様な配列のエイリアスがあります。もしそれ以上の引数が必要な場合、上記の例にあるように```l=LENGTH [string[]]```といった形になります。若しくは、自分でエイリアスを作ることもできます :)
