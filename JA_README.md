@@ -167,3 +167,41 @@ try {
 
 注: `try`はサブシェル内で実行されるため、内部で変数を定義することはできません。
 
+
+基礎的なロギング、色、パワーラインの絵文字を使う
+===================================================
+
+```
+import util/log
+```
+
+```bash
+# 色を使う
+echo "$(UI.Color.Blue)I'm blue...$(UI.Color.Default)"
+
+# 名前空間を定義してこのファイルの基礎的なロギングを可能にする
+namespace myApp
+# ログ関数に、名前空間'myApp'内のもの全てをDEBUGというログハンドラーに流すように設定する
+Log::AddOutput myApp DEBUG
+
+# ここから、DEBUG出力のセットを使って書くことができる
+Log "Play me some Jazz, will ya?${UI.Powerline.Saxphone}"
+
+# エラーメッセージをSTDERRにリダイレクトする
+Log::AddOutput error STDERR
+subject=error Log "Something bad happened."
+
+# 出力をリセットする
+Log::ResetAllOutputsAndFilters
+
+# 直接StdErr出力に書き出すこともできます
+Console::WriteStdErr "This will be printed to STDERR, no matter what."
+```
+
+色やPowerline絵文字は、それらをサポートしていないシステムでは自動的に適宜置き換えられます
+Powerline絵文字を見るためには、powerlineのパッチ済みフォントを使う必要があります。
+
+利用可能な色と絵文字のリストは、[lib/UI/Color.sh](https://github.com/niieani/bash-oo-framework/blob/master/lib/UI/Color.sh)を参照してください。
+ForkしてもっとContributeしてください！
+
+より発展的なロギングについては以下の[発展的ロギング](#発展的なロギング)を参照してください。
