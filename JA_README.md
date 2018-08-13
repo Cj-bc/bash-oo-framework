@@ -136,20 +136,34 @@ test "${assocArray[inside]}" = "adding a new value"
 ファイルの代わりにディレクトリへのパスを指定することで、ディレクトリの中身を全て読み込むこともできます。
 
 
+`try & catch`でエラーハンドリング
+====================================
+
+```bash
+import util/tryCatch
+import util/exception # Exception::PrintException使用時のみ必要
+```
+
+使用例:
+
+```bash
+try {
+    # something...
+    cp ~/test ~/test2
+    # something more...
+} catch {
+    echo "The hard disk is not connected properly!"
+    echo "Caught Exception:$(UI.Color.Red) $__BACKTRACE_COMMAND__ $(UI.Color.Default)"
+    echo "File: $__BACKTRACE_SOURCE__, Line: $__BACKTRACE_LINE__"
+
+    ## printing a caught exception couldn't be simpler, as it's stored in "${__EXCEPTION__[@]}"
+    Exception::PrintException "${__EXCEPTION__[@]}"
+}
+```
+
+```try```ブロック内でもしなんらかのコマンドが失敗した時（例: 返り値が0以外）、```catch```ブロックが自動的に実行されます。
+```try```ブロックの中括弧は必ずしも必要ではありませんが、```catch```は複数行である場合は中括弧が必要になります。
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+注: `try`はサブシェル内で実行されるため、内部で変数を定義することはできません。
 
