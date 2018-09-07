@@ -205,3 +205,56 @@ Powerline絵文字を見るためには、powerlineのパッチ済みフォン�
 ForkしてもっとContributeしてください！
 
 より発展的なロギングについては以下の[発展的ロギング](#発展的なロギング)を参照してください。
+
+
+パラメータに配列、マップ、オブジェクトを渡す
+=============================================
+
+```
+import util/variable
+```
+
+? variableユーティリティは、`@get`コマンドを使用して、配列と連想配列（ここでは`maps`と呼ばれます）の完全なダンプを提供します。
+
+? `util/namedParameters`と併用することで、個別の引数として渡すことができるようになります。
+
+? より記述しやすく値渡しで変数を渡すには、変数を`$ref:yourVariableName`と呼びます。
+
+参照をサポートしているbash 4.3以上では、参照渡しが可能です。その場合、関数内で起きた変数への変更は、関数の外にも影響を及ぼします。参照渡しをするには、この方法を使ってください: `$ref:yourVariableName`
+
+```bash
+array someArray=( 'one' 'two' )
+# $var:someArray メゾットのハンドラを作ることを除けば、
+# 上記は次の書き方と同義です: declare -a someArray=( 'one' 'two' )
+
+passingArraysInput() {
+  [array] passedInArray
+
+  # chained usage, see below for more details:
+  $var:passedInArray : \
+    { map 'echo "${index} - $(var: item)"' } \
+    { forEach 'var: item toUpper' }
+
+  $var:passedInArray push 'will work only for references'
+}
+
+echo 'passing by $var:'
+
+## 二つの方法で配列のコピーを渡すことができます。(定義を使って渡す)
+passingArraysInput "$(@get someArray)"
+passingArraysInput $var:someArray
+
+## まだ何も変わってません
+$var:someArray toJSON
+
+echo
+echo 'passing by $ref:'
+
+## bash4.3以降の場合、リファレンスが使えるため参照渡しができます。
+## この方法で変数を渡すと、関数内でその変数に起きた変化は全てそのまま元の変数に影響します。
+passingArraysInput $ref:someArray
+
+## 変わっているはずです。
+$var:someArray toJSON
+```
+
