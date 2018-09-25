@@ -258,3 +258,109 @@ passingArraysInput $ref:someArray
 $var:someArray toJSON
 ```
 
+
+標準ライブラリ
+=============
+
+```
+import util/type
+```
+
+一般的な作業をより簡潔に・読みやすくするために、string型や配列などの基本的な型とその操作を提供するライブラリがあります。
+
+三つの方法で標準ライブラリを使用することができます。
+
+### 1. ハンドル作成定義で変数を作成する
+
+もしoo-frameworkのハンドル作成定義で変数を作成したなら、以下のようにすることで標準ライブラリのメゾットを使用できます: `$var:yourVariable someMethod someParameter`
+
+使用可能なハンドル作成定義:
+
+* string
+* integer
+* array
+* map
+* boolean
+
+bash本体はboolean値を持つ変数をサポートしていないため、boolean型の変数はハンドル作成定義を使用して定義・変更する必要のある特殊なケースです。
+
+例:
+
+```bash
+# string型の変数someStringを作成
+string someString="My 123 Joe is 99 Mark"
+
+# 正規表現にマッチした結果を保存
+array matchGroups=$($var:someString getMatchGroups '([0-9]+) [a-zA-Z]+')
+
+? # グループ1の
+? $var:matchGroups every 2 1
+
+? ## group 0, match 1
+? $var:someString match '([0-9]+) [a-zA-Z]+' 0 1
+
+# getterを呼びます。ここでようやく値が出力されます。
+ $var:someString
+ ```
+
+### 2. `var:`を使ってmethodを使う
+
+ハンドルを使って変数を作らなかった場合、`var:`methodを使用してアクセスすることもできます。
+
+例:
+
+```bash
+# string型の変数someStringを作成
+declare someString="My 123 Joe is 99 Mark"
+
+# 正規表現にマッチした結果を保存
+declare -a matchGroups=$(var: someString getMatchGroups '([0-9]+) [a-zA-Z]+')
+
+? # list all metches in group 1:
+var: matchGroups every 2 1
+
+? ## group 0, match 1
+var: someString match '([0-9]+) [a-zA-Z]+' 0 1
+
+# getterを呼びます。ここでようやく値が出力されます。
+var: someString
+```
+
+### 3. 変数の定義をパイプを使ってmethodに直接渡す
+
+最後に、パイプを使って変数定義を使いたいmethodに渡すこともできます。
+
+例:
+```bash
+# string型の変数someStringを作成
+declare someString="My 123 Joe is 99 Mark"
+
+# 正規表現にマッチした結果を保存
+declare -a matchGroups=$(@get someString | string.getMatchGroups '([0-9]+) [a-zA-Z]+')
+
+? # lists all matches in group 1:
+@get matchGroups | array.every 2 1
+
+? ## group 0, match 1
+@get someString | string.match '([0-9]+) [a-zA-Z]+' 0 1
+
+# 値の出力
+echo "$someString"
+```
+
+## 標準ライブラリに追加する
+
+次のように定義することで、カスタムmethodを標準ライブラリに追加することができます。
+```bash
+string.makeCool() {
+  @resolve:this ## パイプ処理を追加したい場合必要です
+  local outValue="cool value: $this"
+  @return outValue
+}
+
+string someString="nice"
+$var:someString makeCool
+# "cool value: nice"と出力される
+```
+
+詳しくは`classを定義する`を参照してください。
