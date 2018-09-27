@@ -364,3 +364,26 @@ $var:someString makeCool
 ```
 
 詳しくは`classを定義する`を参照してください。
+
+Functional/operational chains with the Standard Library and custom classes
+==========================================================================
+
+```
+import util/type
+```
+
+? Bash Infinityの型システムでは、C#やJava, JavaScript(JQueryのモナドライクなスタイルを考えてください)のようにメゾットをつなげたり、あるコマンドから他のコマンドへ出力をパイプしたりすることができます。
+
+```bash
+declare -a someArray=( 'one' 'two' )
+
+var: someArray : \
+  { map 'echo "${index} - $(var: item)"' } \
+  { forEach 'var: item toUpper' }
+
+# 上記のコマンドは以下の配列を定義します:
+# ( '0 - ONE' '1 - TWO' )
+```
+
+次の連鎖で使用可能なメゾットは、その前に実行されたメゾットの戻り値の方によります。
+
