@@ -493,3 +493,50 @@ $var:Mark
 SingletonExample PrintYoMama
 ```
 
+ユニットテストを書く
+====================
+
+```
+import util/test
+```
+
+![unit tests](https://raw.githubusercontent.com/niieani/bash-oo-framework/master/docs/unit.png "フレームワーク自身のユニットテスト")
+
+[Bats](https://github.com/sstephenson/bats)のように、Bashスクリプトや他のUNIXプログラムをテストするためにユニットテストモジュールを使用できます。
+テストケースは標準的なシェルコマンドから構成されます。テストケースを走らせる際、Infinity Frameworkは、BatsのようにBashのerrexitオプション(set -e)を使用します。それぞれのテストはサブシェルで実行され、他のテストケースから独立しています。Batsから引用すると:
+
+? > テストケース内のすべてのコマンドが終了コード0(成功)で終了したら、テストは通ります。このように、それぞれの行は成功を期待されます。
+
+より発展的なテストをする必要がある場合やbash 4以外のシェルでテストを実行する必要がある場合、Batsを使用することを推奨します。
+
+使用例:
+
+```bash
+it 'should make a number and change its value'
+try
+    integer aNumber=10
+    aNumber = 12
+    test (($aNumber == 12))
+expectPass
+
+it "should make basic operations on two arrays"
+try
+    array Letters
+    array Letters2
+
+    $var:Letters push "Hello Bobby"
+    $var:Letters push "Hello Maria"
+
+    $var:Letters contains "Hello Bobby"
+    $var:Letters contains "Hello Maria"
+
+    $var:Letters2 push "Hello Midori,
+                        Best regards!"
+
+    $var:Letters2 concatAdd $var:Letters
+
+    $var:Letters2 contains "Hello Bobby"
+expectPass
+```
+
+これがBashだなんて信じられます!? ;-)
