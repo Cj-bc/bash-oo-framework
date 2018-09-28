@@ -671,3 +671,32 @@ Log::AddOutput unimportant VOID
 Hey, I am a function!
 Hurray: logging from myFunction
 ```
+
+使い方
+=====
+
+1. このレポジトリをcloneもしくはダウンロードしてください。必要なのは **/lib/** ディレクトリのみです。
+2. そのディレクトリのすぐ外(訳注: 先ほどの`/lib`と同じ階層)にファイルを作成し、先頭に以下を追加してください。
+
+    ```shell
+    #!/usr/bin/env bash
+    source "$( cd "${BASH_SOURCE[0]%/*}" && pwd )/lib/oo-bootstrap.sh"
+    ```
+
+3. もちろん、上記のソースコードも書き換えれば**/lib/**の名称を変えることもできます。
+4. 何もない状態では、import機能のみが使用可能です。
+   型システムなどのその他の機能を使いたいのであれば、以下のようにして各moduleをimportする必要があります:
+
+   ```shell
+   # 型システムのロード
+   import util/log util/exception util/tryCatch util/namedParameters
+
+   # 基礎的な型の標準ライブラリと型システムのロード
+   import util/class
+   ```
+
+5. ユニットテストを使うには```import lib/types/util/test```とします。
+   テスト内で初めてエラーが出たとき、テスト全体が失敗します。
+
+6. `util/exception`や`util/tryCatch`を使うときは```set -o errexit```や```set -e```を使用しないでください。
+   - エラーハンドリングはフレームワーク自体で行うため、それらは不要です。
