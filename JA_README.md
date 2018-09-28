@@ -540,3 +540,134 @@ expectPass
 ```
 
 これがBashだなんて信じられます!? ;-)
+
+発展的なロギング
+================
+
+```
+import util/log
+```
+
+ここでは、Infinity Frameworkで提供される発展的なロギングの使用方法の例をみてみましょう。
+
+ロギングするすべてのファイルの中で、ロギングスコープ(namespace)を設定することができます。
+設定しなかった場合、namespaceは拡張子を除いたファイル名になります。
+ファイル名は衝突することがあるため、namespaceを設定した方が良いです。
+スコープのおかげで、何を/どのように記録したいかを正確に指定できます。
+
+```bash
+namespace myApp
+
+? ## "myApp"の出力をSTDERRに設定する
+Log::AddOutput myApp STDERR
+
+## 何か試してみましょう:
+Log "logging to stderr"
+```
+
+上のコードは、単純に"logging to stderr"をSTDERRに吐き出します。
+みてわかる通り、"STDERR"と呼ばれるロガーの出力を使いました。自分でロガーを作成して使うことも可能です。
+
+```bash
+## カスタムロガーの作成:
+myLoggingDelegate() {
+    echo "Hurray: $*"
+}
+
+## 登録する必要があります:
+Log::RegisterLogger MYLOGGER myLoggingDelegate
+```
+
+さて、特定の関数からのログのみが、先ほど作成したカスタムロガーに出力されるように設定します:
+
+```bash
+## *myApp内のmyFunctionのログを全てMYLOGGERに流したい*
+Log::AddOutput myApp/myFunction MYLOGGER
+
+## 関数を定義:
+myFunction() {
+    echo "Hey, I am a function!"
+    Log "logging from myFunction"
+}
+
+## 実行:
+myFunction
+```
+
+上記のコードは以下のように出力するはずです:
+
+```
+Hey, I am a function!
+Hurray: logging from myFunction
+```
+
+見ての通り、私たちの関数からのログは自動的に、以前登録されていたSTDERRより明確に規定されたMYLOGGERに返されます。
+両方のロガーに出力したい場合は、特定のフィルターを外すことができます:
+
+```bash
+Log::DisableFilter myApp
+```
+
+この状態で```myFunction```を実行すると、このようになるはずです:
+
+```
+Hey, I am a function!
+Hurray: logging from myFunction
+logging from myFunction
+```
+
+もっと具体的に、 *subject*を指定してロガーを切り替えたり、そのsubjectの出力を停止したりできます:
+
+```bash
+## これまでのコードと同じファイルなので、まずはリセットします
+Log::ResetAllOutputsAndFilters
+
+Log::AddOutput myApp/myFunction MYLOGGER
+
+myFunction() {
+    echo "Hey, I am a function!"
+    Log "logging from myFunction"
+    subject="unimportant" Log "message from myFunction"
+}
+```
+
+そして、subjectに対処するよう、先ほどのカスタムロガーを少し変えましょう:
+
+```bash
+myLoggingDelegate() {
+    echo "Hurray: $subject $*"
+}
+```
+
+この状態で```myFunction```を実行すると、このようになるはずです:
+
+```
+Hey, I am a function!
+Hurray:  logging from myFunction
+Hurray: unimportant message from myFunction
+```
+
+```myApp```ファイル内の```myFunction```の中の、```unimportant```subjectがついたメッセージをフィルタする(もしくはリダイレクトする)には以下のようにします:
+
+```bash
+Log::AddOutput myApp/myFunction/unimportant VOID
+```
+
+```myApp```内の全ての```unimportant```subjectがついたメッセージをフィルタするには:
+
+```bash
+Log::AddOutput myApp/unimportant VOID
+```
+
+もしくは、あらゆる箇所の```unimportant```subjectをフィルタするには以下のようにします:
+
+```bash
+Log::AddOutput unimportant VOID
+```
+
+この状態で```myFunction```を実行すると、このようになるはずです:
+
+```
+Hey, I am a function!
+Hurray: logging from myFunction
+```
