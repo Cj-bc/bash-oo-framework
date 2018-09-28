@@ -387,3 +387,109 @@ var: someArray : \
 
 次の連鎖で使用可能なメゾットは、その前に実行されたメゾットの戻り値の方によります。
 
+自分でクラスを作成する
+======================
+
+クラスの作成はいたってシンプルで、殆どの最近の言語と同じように直感的にできます。
+
+クラス定義:
+
+* **class:YourName()** - クラスの定義
+
+クラス定義の中で使われるキーワード:
+
+* **method ClassName.FunctionName()** - *$this* にアクセスできるメゾットを定義するときに使えます。
+* **public SomeType yourProperty** - パブリックなプロパティを作成します。(全ての型のクラスで使用可能です)
+* **private SomeType _yourProperty** - 上記と同じですが、クラス内のメゾットからのみアクセスができます。
+* **$this** - This変数はメゾットの中で使用可能で、現在の型にアクセスするために使用できます。
+* **this** - $var:thisへのエイリアスで、メゾットを実行したりオブジェクトのプロパティを取得するのに使用します。
+* 今後追加予定: **extends SomeClass** - 元のクラスからの継承
+
+クラスが定義された後、`Type::Initialize NameOfYourType`を呼び出す必要があります。クラスをシングルトンにしたい場合は、`Type::InitializeStatic NameOfYourStaticType`を呼び出してください。
+
+自分でクラスを定義する例:
+
+```bash
+import util/namedParameters util/class
+
+class:Human() {
+  public string name
+  public integer height
+  public array eaten
+
+  Human.__getter__() {
+    echo "I'm a human called $(this name), $(this height) cm tall."
+  }
+
+  Human.Example() {
+    [array]     someArray
+    [integer]   someNumber
+    [...rest]   arrayOfOtherParams
+
+    echo "Testing $(var: someArray toString) and $someNumber"
+    echo "Stuff: ${arrayOfOtherParams[*]}"
+
+    # returning the first passed in array
+    @return someArray
+  }
+
+  Human.Eat() {
+    [string] food
+
+    this eaten push "$food"
+
+    # 値が代入された文字列を返す:
+    @return:value "$this just ate $food, which is the same as $1"
+  }
+
+  Human.WhatDidHeEat() {
+    this eaten toString
+  }
+
+  # 静的メゾットにするには`::`を使用します。
+  Human::PlaySomeJazz() {
+    echo "$(UI.Powerline.Saxophone)"
+  }
+}
+
+# クラスのイニシャライズに必要
+Type::Initialize Human
+
+class:SingletonExample() {
+  private integer YoMamaNumber = 150
+
+  SingletonExample.PrintYoMama() {
+    echo "Number is: $(this YoMamaNumber)!"
+  }
+}
+
+# 静的イニシャライズに必要
+Type::InitializeStatic SingletonExample
+```
+
+ここから、`Human`と`SingletonExample`クラスを使用できます:
+
+```bash
+# Human型のオブジェクト'Mark'を作成
+Human Mark
+
+# string.= (setter)の呼び出し
+$var:Mark name = 'Mark'
+
+# integer.= (setter)の呼び出し
+$var:Mark height = 180
+
+# 'corn'を配列Mark.eatenに追加し、出力を吐き出す
+$var:Mark Eat 'corn'
+
+# 'blueberries'を配列Mark.eatenに追加し、出力を大文字にして吐き出す
+$var:Mark : { Eat 'blueberries' } { toUpper }
+
+# getterを実行
+$var:Mark
+
+# invoke the method on the static instance of SingletonExample
+# SingletonExampleの静的インスタンスにあるメゾットを実行する
+SingletonExample PrintYoMama
+```
+
