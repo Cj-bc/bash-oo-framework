@@ -700,3 +700,15 @@ Hurray: logging from myFunction
 
 6. `util/exception`や`util/tryCatch`を使うときは```set -o errexit```や```set -e```を使用しないでください。
    - エラーハンドリングはフレームワーク自体で行うため、それらは不要です。
+
+Contributing
+=============
+
+気軽にforkして、新しいmoduleや変更をしてPull Requestを送ってください。
+新しく加えたいと思っている機能:
+
+* 全ての重要なメゾットへのユニットテスト
+* bash3対応(できれば、バージョン毎に正しいファイルをimportする動的port)
+? * 一つのファイルにまとまったボイルプレートを生成するwebジェネレーター(moduleを選ぶオプション付き)
+* 主要な型(arrays, maps, strings, integers)の標準ライブラリへの関数の追加
+* 使いやすい標準クラスの追加も歓迎します
