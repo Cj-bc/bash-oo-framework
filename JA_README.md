@@ -11,7 +11,7 @@ Bash Infinityは、bash scriptの可読性を最大限に引き上げ、繰り�
 
 Bash Infinityは分かりづらい"bash syntax"を、より綺麗でよりモダンな文法に変えます。
 
-免責事項: **bash 4**でテストしているため、全てのモジュールが古いバージョンで動くとは限りません。一方、[動かない部分を移植する](#bash3への移植)のは可能（且つ比較的簡単）です。
+免責事項: **bash 4**でテストしているため、全てのモジュールが古いバージョンで動くとは限りません。一方、[動かない部分を移植する](#bash 3対応について)のは可能（且つ比較的簡単）です。
 
 
 クイックスタート
@@ -34,7 +34,7 @@ Bash Infinityは分かりづらい"bash syntax"を、より綺麗でよりモダ
 * **ユニットテスト**ライブラリ (`util/test`)
 * 豊富な関数を揃えた、型システム用標準ライブラリ (`util/type`)
 * **関数型プログラミング**のためのoperational chain (`util/type`)
-* オブジェクト指向用の型システム (`util/class`)
+* オブジェクト指向用の**型システム** (`util/class`)
 
 全ての機能はモジュール単位で構成されているため、簡単に使いたい機能だけをimportすることができます。例えば、名前付き引数やtry-catchモジュールは別々のファイルに記述されています。
 
@@ -45,7 +45,7 @@ Bash Infinityは分かりづらい"bash syntax"を、より綺麗でよりモダ
 import util/exception
 ```
 
-ハイライト機能の一つに、そのまま動作するエラーハンドリングがあります。もしスクリプトがエラーを起こしたら、自動的に終了してstackを呼び出します。
+ハイライト機能の一つに、単体で動作するエラーハンドリングがあります。もしスクリプトがエラーを起こしたら、自動的に終了してstackを呼び出します。
 
 ![example call stack](https://raw.githubusercontent.com/niieani/bash-oo-framework/master/docs/exception.png "Example Call Stack")
 
@@ -80,7 +80,7 @@ testPassingParams() {
     [string[4]] anArrayWithFourElements
     l=2 [string[]] anotherArrayWithTwo
     [string] anotherSingle
-    [reference] table   # references はbash4.3以上でのみ動きます
+    [reference] table   # reference はbash4.3以上でのみ動きます
     [...rest] anArrayOfVariedSize
 
     test "$hello" = "$1" && echo correct
@@ -98,7 +98,7 @@ testPassingParams() {
     test "${table[test]}" = "works"
     table[inside]="adding a new value"
     #
-    # I'm using * just in this example:
+    # ここでのみ*を使ってるぜ:
     test "${anArrayOfVariedSize[*]}" = "${*:10}" && echo correct
 }
 
@@ -122,7 +122,7 @@ test "${assocArray[inside]}" = "adding a new value"
  * **$anArrayOfVariedSize**は、それ以降のすべてのパラメーターの、bashの配列になります。
 
 言い換えれば、引数をそれらの名前で呼ぶことができる(可読性を向上させる)だけでなく、配列を簡単に渡す(bash4.3以上なら、さらに変数の参照を渡す)ことができます！それに加えて、マップされた変数は全てローカル変数です。
-このモジュールはとても軽量で、bash 3でもbash 4でも動きます(riferencceを除く - bash >=4.3)。もしこれだけを切り離して使いたければ、`/lib/system/02_named_parameters.sh`を取り出して使ってください。
+このモジュールはとても軽量で、bash 3でもbash 4でも動きます(referencceを除く - bash >=4.3)。もしこれだけを切り離して使いたければ、`/lib/system/02_named_parameters.sh`を取り出して使ってください。
 
 
 注： 2-10までの引数には、```[string[4]]```の様な配列のエイリアスがあります。もしそれ以上の引数が必要な場合、上記の例にあるように```l=LENGTH [string[]]```といった形になります。若しくは、自分でエイリアスを作ることもできます :)
@@ -156,7 +156,7 @@ try {
     echo "Caught Exception:$(UI.Color.Red) $__BACKTRACE_COMMAND__ $(UI.Color.Default)"
     echo "File: $__BACKTRACE_SOURCE__, Line: $__BACKTRACE_LINE__"
 
-    ## printing a caught exception couldn't be simpler, as it's stored in "${__EXCEPTION__[@]}"
+?    ## 捕捉した例外を表示する一番簡単な方法は
     Exception::PrintException "${__EXCEPTION__[@]}"
 }
 ```
@@ -185,7 +185,7 @@ namespace myApp
 Log::AddOutput myApp DEBUG
 
 # ここから、DEBUG出力のセットを使って書くことができる
-Log "Play me some Jazz, will ya?${UI.Powerline.Saxphone}"
+Log "Play me some Jazz, will ya? $(UI.Powerline.Saxophone)"
 
 # エラーメッセージをSTDERRにリダイレクトする
 Log::AddOutput error STDERR
@@ -230,7 +230,7 @@ array someArray=( 'one' 'two' )
 passingArraysInput() {
   [array] passedInArray
 
-  # chained usage, see below for more details:
+  # 連鎖した使い方です。詳しくは下を参照してください:
   $var:passedInArray : \
     { map 'echo "${index} - $(var: item)"' } \
     { forEach 'var: item toUpper' }
@@ -429,7 +429,7 @@ class:Human() {
     echo "Testing $(var: someArray toString) and $someNumber"
     echo "Stuff: ${arrayOfOtherParams[*]}"
 
-    # returning the first passed in array
+    # はじめに渡された配列を返します
     @return someArray
   }
 
@@ -438,7 +438,7 @@ class:Human() {
 
     this eaten push "$food"
 
-    # 値が代入された文字列を返す:
+    # 値が代入された文字列を返します:
     @return:value "$this just ate $food, which is the same as $1"
   }
 
@@ -446,7 +446,7 @@ class:Human() {
     this eaten toString
   }
 
-  # 静的メゾットにするには`::`を使用します。
+  # 静的メゾットにするには`::`を使用します
   Human::PlaySomeJazz() {
     echo "$(UI.Powerline.Saxophone)"
   }
