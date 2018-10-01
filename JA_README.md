@@ -739,3 +739,13 @@ bash 3対応について
 * http://kvz.io/blog/2013/11/21/bash-best-practices/
 * http://www.davidpashley.com/articles/writing-robust-shell-scripts/
 * http://qntm.org/bash
+
+
+---
+
+翻訳者(translator): @Cj-bc
+素人翻訳ですので、誤りが多々ある可能性がございます。
+訂正等あればよろしくお願いします。
+
+As I'm not a pro, there might be some mistakes.
+Please fix if you found any mistakes.
