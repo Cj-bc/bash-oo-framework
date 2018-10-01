@@ -717,3 +717,25 @@ bash 3対応について
 ==================
 
 ? **bash 3**に移植する際の主な課題は、型システムで使われる連想配列のpolyfillを作成することです(おそらく、連想配列のキーをそれぞれのインデックスに使うことで実現します)。そのほかの課題として、グローバル定義(`declare -g`)を削除することが挙げられます。
+
+謝辞
+====
+
+もし関数が他のライブラリやwebページから得られたものならば、私はコード内のコメントにいつも書いています。
+
+さらに、Bash Infinityのv1を作るにあたりオブジェクト指向のbashライブラリからいくつかの発想を得ました:
+
+* https://github.com/tomas/skull/
+* https://github.com/domachine/oobash/
+* https://github.com/metal3d/Baboosh/
+* http://sourceforge.net/p/oobash/
+* http://lab.madscience.nl/oo.sh.txt
+* http://unix.stackexchange.com/questions/4495/object-oriented-shell-for-nix
+* http://hipersayanx.blogspot.sk/2012/12/object-oriented-programming-in-bash.html
+
+その他bashの参考:
+
+* http://wiki.bash-hackers.org
+* http://kvz.io/blog/2013/11/21/bash-best-practices/
+* http://www.davidpashley.com/articles/writing-robust-shell-scripts/
+* http://qntm.org/bash
