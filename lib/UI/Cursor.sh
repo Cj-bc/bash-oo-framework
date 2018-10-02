@@ -1,5 +1,7 @@
 import util/class
 
+# TODO: 'move*' methods are too slow
+
 class:UI.Cursor() {
   # http://askubuntu.com/questions/366103/saving-more-corsor-positions-with-tput-in-bash-terminal
 	# http://unix.stackexchange.com/questions/88296/get-vertical-cursor-position
@@ -29,6 +31,49 @@ class:UI.Cursor() {
 
     tput cup $y $x
 
+    @return
+  }
+
+  # move to RIGHT for `x` letters
+  # @param <int x>
+  UI.Cursor.moveRight() {
+    [integer] x
+
+    tput cuf $x
+    this capture
+
+    @return
+  }
+
+  # move to LEFT for `x` letters
+  # @param <int x>
+  UI.Cursor.moveLeft() {
+    [integer] x
+
+    tput cub $x
+    this capture
+
+    @return
+  }
+
+  # move Up  for `y` letters
+  # @param <int y>
+  UI.Cursor.moveUp() {
+    [integer] y
+
+    tput cuu $y
+    this capture
+
+    @return
+  }
+
+  # move Up  for `y` letters
+  # @param <int y>
+  UI.Cursor.moveDown() {
+    [integer] y
+
+    tput cud $y
+    this capture
     @return
   }
 }
