@@ -34,6 +34,18 @@ class:UI.Cursor() {
     @return
   }
 
+  # move to `x` `y`
+  # @param <int x> <int y>
+  UI.Cursor.move() {
+   [integer] x
+   [integer] y
+
+   tput cup $x $y
+   this capture
+
+   @return
+  }
+
   # move to RIGHT for `x` letters
   # @param <int x>
   UI.Cursor.moveRight() {
