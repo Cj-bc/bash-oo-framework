@@ -33,61 +33,58 @@ class:UI.Cursor() {
 
     @return
   }
-
-  # move to `x` `y`
-  # @param <int x> <int y>
-  UI.Cursor.move() {
-   [integer] x
-   [integer] y
-
-   tput cup $x $y
-   this capture
-
-   @return
-  }
-
-  # move to RIGHT for `x` letters
-  # @param <int x>
-  UI.Cursor.moveRight() {
-    [integer] x
-
-    tput cuf $x
-    this capture
-
-    @return
-  }
-
-  # move to LEFT for `x` letters
-  # @param <int x>
-  UI.Cursor.moveLeft() {
-    [integer] x
-
-    tput cub $x
-    this capture
-
-    @return
-  }
-
-  # move Up  for `y` letters
-  # @param <int y>
-  UI.Cursor.moveUp() {
-    [integer] y
-
-    tput cuu $y
-    this capture
-
-    @return
-  }
-
-  # move Up  for `y` letters
-  # @param <int y>
-  UI.Cursor.moveDown() {
-    [integer] y
-
-    tput cud $y
-    this capture
-    @return
-  }
 }
+
+
+# move to `x` `y`
+# @param <int x> <int y>
+UI.Cursor::move() {
+ [integer] x
+ [integer] y
+
+ tput cup $x $y
+
+ @return
+}
+
+# move to RIGHT for `x` letters
+# @param <int x>
+UI.Cursor::moveRight() {
+  [integer] x
+
+  tput cuf $x
+
+  @return
+}
+
+# move to LEFT for `x` letters
+# @param <int x>
+UI.Cursor::moveLeft() {
+  [integer] x
+
+  tput cub $x
+
+  @return
+}
+
+# move Up  for `y` letters
+# @param <int y>
+UI.Cursor::moveUp() {
+  [integer] y
+
+  tput cuu $y
+
+  @return
+}
+
+# move Up  for `y` letters
+# @param <int y>
+UI.Cursor::moveDown() {
+  [integer] y
+
+  tput cud $y
+  @return
+}
+
 
 Type::Initialize UI.Cursor
