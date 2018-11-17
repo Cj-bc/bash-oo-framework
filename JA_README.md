@@ -125,10 +125,10 @@ test "${assocArray[inside]}" = "adding a new value"
 このモジュールはとても軽量で、bash 3でもbash 4でも動きます(referencceを除く - bash >=4.3)。もしこれだけを切り離して使いたければ、`/lib/system/02_named_parameters.sh`を取り出して使ってください。
 
 
-注： 2-10までの引数には、```[string[4]]```の様な配列のエイリアスがあります。もしそれ以上の引数が必要な場合、上記の例にあるように```l=LENGTH [string[]]```といった形になります。若しくは、自分でエイリアスを作ることもできます :)
+注： 2-10までの引数には、`[string[4]]`の様な配列のエイリアスがあります。もしそれ以上の引数が必要な場合、上記の例にあるように`l=LENGTH [string[]]`といった形になります。若しくは、自分でエイリアスを作ることもできます :)
 
 
-```import```
+`import`
 =============
 
 ブートストラップの後、ライブラリや自前のファイルを読み込むために`import`コマンドを使うことができます。
@@ -161,8 +161,8 @@ try {
 }
 ```
 
-```try```ブロック内でもしなんらかのコマンドが失敗した時（例: 返り値が0以外）、```catch```ブロックが自動的に実行されます。
-```try```ブロックの中括弧は必ずしも必要ではありませんが、```catch```は複数行である場合は中括弧が必要になります。
+`try`ブロック内でもしなんらかのコマンドが失敗した時（例: 返り値が0以外）、`catch`ブロックが自動的に実行されます。
+`try`ブロックの中括弧は必ずしも必要ではありませんが、`catch`は複数行である場合は中括弧が必要になります。
 
 
 注: `try`はサブシェル内で実行されるため、内部で変数を定義することはできません。
@@ -331,6 +331,7 @@ var: someString
 最後に、パイプを使って変数定義を使いたいmethodに渡すこともできます。
 
 例:
+
 ```bash
 # string型の変数someStringを作成
 declare someString="My 123 Joe is 99 Mark"
@@ -351,6 +352,7 @@ echo "$someString"
 ## 標準ライブラリに追加する
 
 次のように定義することで、カスタムmethodを標準ライブラリに追加することができます。
+
 ```bash
 string.makeCool() {
   @resolve:this ## パイプ処理を追加したい場合必要です
@@ -608,7 +610,7 @@ Hurray: logging from myFunction
 Log::DisableFilter myApp
 ```
 
-この状態で```myFunction```を実行すると、このようになるはずです:
+この状態で`myFunction`を実行すると、このようになるはずです:
 
 ```
 Hey, I am a function!
@@ -639,7 +641,7 @@ myLoggingDelegate() {
 }
 ```
 
-この状態で```myFunction```を実行すると、このようになるはずです:
+この状態で`myFunction`を実行すると、このようになるはずです:
 
 ```
 Hey, I am a function!
@@ -647,25 +649,25 @@ Hurray:  logging from myFunction
 Hurray: unimportant message from myFunction
 ```
 
-```myApp```ファイル内の```myFunction```の中の、```unimportant```subjectがついたメッセージをフィルタする(もしくはリダイレクトする)には以下のようにします:
+`myApp`ファイル内の`myFunction`の中の、`unimportant`subjectがついたメッセージをフィルタする(もしくはリダイレクトする)には以下のようにします:
 
 ```bash
 Log::AddOutput myApp/myFunction/unimportant VOID
 ```
 
-```myApp```内の全ての```unimportant```subjectがついたメッセージをフィルタするには:
+`myApp`内の全ての`unimportant`subjectがついたメッセージをフィルタするには:
 
 ```bash
 Log::AddOutput myApp/unimportant VOID
 ```
 
-もしくは、あらゆる箇所の```unimportant```subjectをフィルタするには以下のようにします:
+もしくは、あらゆる箇所の`unimportant`subjectをフィルタするには以下のようにします:
 
 ```bash
 Log::AddOutput unimportant VOID
 ```
 
-この状態で```myFunction```を実行すると、このようになるはずです:
+この状態で`myFunction`を実行すると、このようになるはずです:
 
 ```
 Hey, I am a function!
@@ -695,10 +697,10 @@ Hurray: logging from myFunction
    import util/class
    ```
 
-5. ユニットテストを使うには```import lib/types/util/test```とします。
+5. ユニットテストを使うには`import lib/types/util/test`とします。
    テスト内で初めてエラーが出たとき、テスト全体が失敗します。
 
-6. `util/exception`や`util/tryCatch`を使うときは```set -o errexit```や```set -e```を使用しないでください。
+6. `util/exception`や`util/tryCatch`を使うときは`set -o errexit`や`set -e`を使用しないでください。
    - エラーハンドリングはフレームワーク自体で行うため、それらは不要です。
 
 Contributing
