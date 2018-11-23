@@ -62,7 +62,7 @@ Type::IsPrimitive() {
   local type="$1"
 
   case "$type" in
-    'array'|'map'|'string'|'integer'|'boolean'|'integerArray'|'reference') ## TODO: reference should be resolved
+    'array'|'map'|'string'|'integer'|'boolean'|'integerArray'|'reference'|'float') ## TODO: reference should be resolved
       return 0 ;;
     * )
       return 1 ;;
@@ -254,7 +254,7 @@ Type::TrapAndCreate() {
     if [[ -z "$__typeCreate_varValue" ]]
     then
       case "$__typeCreate_varType" in
-        'array'|'map') eval "$__typeCreate_varName=()" ;;
+        'array'|'map'|'float') eval "$__typeCreate_varName=()" ;;
         'string') eval "$__typeCreate_varName=''" ;;
         'integer') eval "$__typeCreate_varName=0" ;;
         'boolean') eval "$__typeCreate_varName=${__primitive_extension_fingerprint__boolean}:false" ;;
@@ -344,6 +344,7 @@ alias integer='_type=integer Type::TrapAssign declare -i'
 alias array='_type=array Type::TrapAssign declare -a'
 alias integerArray='_type=integerArray Type::TrapAssign declare -ai'
 alias map='_type=map Type::TrapAssign declare -A'
+alias float='_type=float Type::TrapAssign declare -a'
 #alias global:reference='_type=reference Type::TrapAssign declare -ng'
 #alias global:string='_type=string Type::TrapAssign declare -g'
 #alias global:integer='_type=integer Type::TrapAssign declare -ig'
