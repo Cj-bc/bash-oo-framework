@@ -84,7 +84,7 @@ Type::IsPrimitive() {
 Type::GetPrimitiveExtensionFromVariable() {
   local variableName="$1"
 
-  if [[ "${!variableName}" != "$__primitive_extension_declaration"* ]]
+  if [[ "${!variableName}" != "$__primitive_extension_declaration"* && "$(eval echo \${${variableName}[0]})" != "$__primitive_extension_declaration"* ]]
   then
     return
   fi
