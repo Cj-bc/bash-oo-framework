@@ -19,18 +19,19 @@ float.=() {
   case $1 in
     [0-9.]*e[-0-9]* )
       local integer_digits=${value%.*}
-      local -i number_of_integer_digits=${#integer_places}
+      local -i number_of_integer_digits=${#integer_digits}
       local -i exponent=${value#*e}
-      [[ $number_of_integer_digits -ne 1 ]] && exponent+=((${number_of_integer_digits} - 1))
+      [[ $number_of_integer_digits -ne 1 ]] && exponent+=$((number_of_integer_digits - 1))
       this[1]="${value/./}"
       this[2]="$exponent"
       ;;
     [0-9.]* )
       local integer_digits=${value%.*}
-      local -i number_of_integer_digits=${#integer_places}
+      local -i number_of_integer_digits=${#integer_digits}
       this[1]="${value/./}"
-      this[2]=(($number_of_integer_digits - 1))
+      this[2]=$((number_of_integer_digits - 1))
       ;;
+    *) :;;
   esac
 
   @return
