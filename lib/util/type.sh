@@ -53,6 +53,15 @@ Type::GetTypeOfVariable() {
       fi
     fi
 
+    if [[ "$variableType" == "array" ]]
+    then
+      local extensionType=$(Type::GetPrimitiveExtensionFromVariable "${variableName}")
+      if [[ ! -z "$extensionType" ]]
+      then
+        variableType="$extensionType"
+      fi
+    fi
+
     DEBUG Log "Variable $variableName is typeof $variableType"
 
     echo "$variableType"
