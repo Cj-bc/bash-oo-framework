@@ -264,7 +264,7 @@ Type::TrapAndCreate() {
     if [[ -z "$__typeCreate_varValue" ]]
     then
       case "$__typeCreate_varType" in
-        'array'|'map'|'float') eval "$__typeCreate_varName=()" ;;
+        'array'|'map') eval "$__typeCreate_varName=()" ;;
         'string') eval "$__typeCreate_varName=''" ;;
         'integer') eval "$__typeCreate_varName=0" ;;
         'boolean') eval "$__typeCreate_varName=${__primitive_extension_fingerprint__boolean}:false" ;;
