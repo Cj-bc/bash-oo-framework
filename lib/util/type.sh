@@ -377,6 +377,7 @@ alias float='_type=float Type::TrapAssign declare -a'
 #alias global:integer='_type=integer Type::TrapAssign declare -ig'
 #alias global:array='_type=array Type::TrapAssign declare -ag'
 #alias global:map='_type=map Type::TrapAssign declare -Ag'
+#alias global:float'_type=float Type::TrapAssign declare -ag'
 
 ##############################
 
