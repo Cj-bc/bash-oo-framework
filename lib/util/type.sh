@@ -259,6 +259,7 @@ Type::TrapAndCreate() {
         'string') eval "$__typeCreate_varName=''" ;;
         'integer') eval "$__typeCreate_varName=0" ;;
         'boolean') eval "$__typeCreate_varName=${__primitive_extension_fingerprint__boolean}:false" ;;
+        'float') eval "$__typeCreate_varName=( ${__primitive_extension_fingerprint__float} '' '' )" ;;
         * )
         # Log "constructing: $__typeCreate_varName ($__typeCreate_varType) = $(__constructor_recursion=0 Type::Construct $__typeCreate_varType)"
 
@@ -276,6 +277,22 @@ Type::TrapAndCreate() {
           fi
           eval "$__typeCreate_varName=\"${__primitive_extension_fingerprint__boolean}:${__typeCreate_varValue}\"" ;;
       ## TODO: add case of setting value already with fingerprint
+        'float')
+          if [[ "${__typeCreate_varValue}" ~= [0-9.]+e[-0-9]* ]]
+          then
+            local integer_digits=${value%.*}
+            local -i number_of_integer_digits=${#integer_places}
+            local -i exponent=${value#*e}
+            [[ $number_of_integer_digits -ne 1 ]] && exponent+=((${number_of_integer_digits} - 1))
+            int="${value/./}"
+            decimal="$exponent"
+          elif [[ "${__typeCreate_varValue}" ~= [-0-9]+\.[0-9]* ]]
+            local integer_digits=${value%.*}
+            local -i number_of_integer_digits=${#integer_places}
+            int="${value/./}"
+            decimal=(($number_of_integer_digits - 1))
+          fi
+          eval "$__typeCreate_varName=( \"${__primitive_extension_fingerprint__float}\" $int $decimal )";;
         *) ;;
       esac
     fi
