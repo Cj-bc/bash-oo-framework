@@ -268,7 +268,7 @@ Type::TrapAndCreate() {
         'string') eval "$__typeCreate_varName=''" ;;
         'integer') eval "$__typeCreate_varName=0" ;;
         'boolean') eval "$__typeCreate_varName=${__primitive_extension_fingerprint__boolean}:false" ;;
-        'float') eval "$__typeCreate_varName=( ${__primitive_extension_fingerprint__float} '' '' )" ;;
+        'float') eval "$__typeCreate_varName=( "${__primitive_extension_fingerprint__float}" '' '' )" ;;
         * )
         # Log "constructing: $__typeCreate_varName ($__typeCreate_varType) = $(__constructor_recursion=0 Type::Construct $__typeCreate_varType)"
 
@@ -336,9 +336,9 @@ Type::TrapAndCreate() {
   then
     __typeCreate_normalCodeStarted+=1
 
-  # Console::WriteStdErr "NOPASS ${commandWithArgs[*]}"
-  # Console::WriteStdErr "normal code count ($__typeCreate_normalCodeStarted)"
-  # Console::WriteStdErr --
+  DEBUG Log "NOPASS ${commandWithArgs[*]}"
+  DEBUG Log "normal code count ($__typeCreate_normalCodeStarted)"
+  DEBUG Log --
   else
     unset __typeCreate_next
 
