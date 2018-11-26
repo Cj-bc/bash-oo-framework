@@ -289,17 +289,18 @@ Type::TrapAndCreate() {
         'float')
           if [[ "${__typeCreate_varValue}" =~ [0-9.]+e[-0-9]* ]]
           then
-            local integer_digits=${value%.*}
-            local -i number_of_integer_digits=${#integer_places}
-            local -i exponent=${value#*e}
-            [[ $number_of_integer_digits -ne 1 ]] && exponent+=((${number_of_integer_digits} - 1))
-            int="${value/./}"
+            local integer_digits=${__typeCreate_varValue%.*}
+            local -i number_of_integer_digits=${#integer_digits}
+            local -i exponent=${__typeCreate_varValue#*e}
+            [[ $number_of_integer_digits -ne 1 ]] && exponent+=$((number_of_integer_digits - 1))
+            int="${__typeCreate_varValue/./}"
             decimal="$exponent"
-            local integer_digits=${value%.*}
-            local -i number_of_integer_digits=${#integer_places}
-            int="${value/./}"
-            decimal=(($number_of_integer_digits - 1))
           elif [[ "${__typeCreate_varValue}" =~ [-0-9]+\.[0-9]* ]]
+          then
+            local integer_digits=${__typeCreate_varValue%.*}
+            local -i number_of_integer_digits=${#integer_digits}
+            int="${__typeCreate_varValue/./}"
+            decimal=$((number_of_integer_digits - 1))
           fi
           eval "$__typeCreate_varName=( \"${__primitive_extension_fingerprint__float}\" $int $decimal )";;
         *) ;;
