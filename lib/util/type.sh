@@ -287,7 +287,7 @@ Type::TrapAndCreate() {
           eval "$__typeCreate_varName=\"${__primitive_extension_fingerprint__boolean}:${__typeCreate_varValue}\"" ;;
       ## TODO: add case of setting value already with fingerprint
         'float')
-          if [[ "${__typeCreate_varValue}" ~= [0-9.]+e[-0-9]* ]]
+          if [[ "${__typeCreate_varValue}" =~ [0-9.]+e[-0-9]* ]]
           then
             local integer_digits=${value%.*}
             local -i number_of_integer_digits=${#integer_places}
@@ -295,11 +295,11 @@ Type::TrapAndCreate() {
             [[ $number_of_integer_digits -ne 1 ]] && exponent+=((${number_of_integer_digits} - 1))
             int="${value/./}"
             decimal="$exponent"
-          elif [[ "${__typeCreate_varValue}" ~= [-0-9]+\.[0-9]* ]]
             local integer_digits=${value%.*}
             local -i number_of_integer_digits=${#integer_places}
             int="${value/./}"
             decimal=(($number_of_integer_digits - 1))
+          elif [[ "${__typeCreate_varValue}" =~ [-0-9]+\.[0-9]* ]]
           fi
           eval "$__typeCreate_varName=( \"${__primitive_extension_fingerprint__float}\" $int $decimal )";;
         *) ;;
