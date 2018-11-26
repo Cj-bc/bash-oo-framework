@@ -6,6 +6,7 @@ import util/namedParameters util/pipe util/variable util/command
 
 declare -g __primitive_extension_declaration=2D6A822E
 declare -g __primitive_extension_fingerprint__boolean=${__primitive_extension_declaration}36884C70843578D37E6773C4
+declare -g __primitive_extension_fingerprint__float=${__primitive_extension_declaration}666126156174010 # TODO: add float fingerprint
 declare -g __return_separator=52A586A48E074BB6812DCFDC790841F5
 declare -g __oo__type_handler_functions=()
 declare -g __oo__variableMethodPrefix="$var:"
