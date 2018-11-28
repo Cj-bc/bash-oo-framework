@@ -22,12 +22,21 @@ float.=() {
       local -i number_of_integer_digits=${#integer_digits}
       local -i exponent=${value#*e}
       [[ $number_of_integer_digits -ne 1 ]] && exponent+=$((number_of_integer_digits - 1))
+
+      # I need to re-define this[0], otherwise it will be ( [0]="[0]=2D6A822E666126156174010" [1]=... )
+      # TODO: find someway to remove this code
+      unset this
+      this[0]=${__primitive_extension_fingerprint__float}
       this[1]="${value/./}"
       this[2]="$exponent"
       ;;
     [0-9.]* )
       local integer_digits=${value%.*}
       local -i number_of_integer_digits=${#integer_digits}
+
+      # TODO: find someway to remove this code(same as above)
+      unset this
+      this[0]=${__primitive_extension_fingerprint__float}
       this[1]="${value/./}"
       this[2]=$((number_of_integer_digits - 1))
       ;;
