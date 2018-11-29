@@ -13,6 +13,7 @@ float.__getter__() {
   echo "${this[@]}"
   @return
 }
+
 # can treat both of '123.456' and '1.23456e2'
 float.=() {
   [string] value
@@ -27,7 +28,7 @@ float.=() {
       # TODO: find someway to remove this code
       unset this
       this[0]=${__primitive_extension_fingerprint__float}
-      this[1]="${value/./}"
+      this[1]="${value//[.e]/}"
       this[2]="$exponent"
       ;;
     [0-9.]* )

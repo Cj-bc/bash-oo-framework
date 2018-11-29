@@ -293,7 +293,7 @@ Type::TrapAndCreate() {
             local -i number_of_integer_digits=${#integer_digits}
             local -i exponent=${__typeCreate_varValue#*e}
             [[ $number_of_integer_digits -ne 1 ]] && exponent+=$((number_of_integer_digits - 1))
-            int="${__typeCreate_varValue/./}"
+            int="${__typeCreate_varValue//[.e]/}"
             decimal="$exponent"
           elif [[ "${__typeCreate_varValue}" =~ [-0-9]+\.[0-9]* ]]
           then
